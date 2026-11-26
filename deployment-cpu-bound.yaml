@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-bound
+  template:
+    metadata:
+      labels:
+        app: cpu-bound
+    spec:
+      containers:
+      - name: cpu-bound
+        image: theo2311/poi-cpu-bound:v1
+        ports:
+        - containerPort: 8081
+        env:
+        - name: PORT
+          value: "8081"
+        - name: WORKERS
+          value: "2"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memory-bound
+  template:
+    metadata:
+      labels:
+        app: memory-bound
+    spec:
+      containers:
+      - name: memory-bound
+        image: theo2311/poi-memory-bound:v1
+        ports:
+        - containerPort: 8083
+        env:
+        - name: PORT
+          value: "8083"

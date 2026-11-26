@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: io-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: io-bound
+  template:
+    metadata:
+      labels:
+        app: io-bound
+    spec:
+      containers:
+      - name: io-bound
+        image: theo2311/poi-io-bound:v1
+        ports:
+        - containerPort: 8082
+        env:
+        - name: PORT
+          value: "8082"
