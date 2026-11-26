@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-bound
+  template:
+    metadata:
+      labels:
+        app: cpu-bound
+    spec:
+      containers:
+      - name: cpu-bound
+        image: theo2311/poi-cpu-bound:v1
+        ports:
+        - containerPort: 8081
+        env:
+        - name: PORT
+          value: "8081"
+        - name: WORKERS
+          value: "2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-cpu
+spec:
+  type: NodePort
+  selector:
+    app: cpu-bound
+  ports:
+  - port: 8081
+    targetPort: 8081
+    nodePort: 30081
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: io-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: io-bound
+  template:
+    metadata:
+      labels:
+        app: io-bound
+    spec:
+      containers:
+      - name: io-bound
+        image: theo2311/poi-io-bound:v1
+        ports:
+        - containerPort: 8082
+        env:
+        - name: PORT
+          value: "8082"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-io
+spec:
+  type: NodePort
+  selector:
+    app: io-bound
+  ports:
+  - port: 8082
+    targetPort: 8082
+    nodePort: 30082
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-bound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memory-bound
+  template:
+    metadata:
+      labels:
+        app: memory-bound
+    spec:
+      containers:
+      - name: memory-bound
+        image: theo2311/poi-memory-bound:v1
+        ports:
+        - containerPort: 8083
+        env:
+        - name: PORT
+          value: "8083"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-memory
+spec:
+  type: NodePort
+  selector:
+    app: memory-bound
+  ports:
+  - port: 8083
+    targetPort: 8083
+    nodePort: 30083
